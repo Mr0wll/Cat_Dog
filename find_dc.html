@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Dog or Cat</title>
+  <link rel="stylesheet" href="find_dc.css" />
+  <script src="Q7.js" defer></script>
+</head>
+<body>
+  <!-- Header -->
+  <header id="header"></header>
+
+  <!-- Side Menu -->
+  <aside>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="find_dc.html">Find a dog/cat</a></li>
+        <li><a href="dog_care.html">Dog Care</a></li>
+        <li><a href="cat_care.html">Cat Care</a></li>
+        <li><a href="login.html">Have a pet to give away</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="account.html">Create account</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Content Area -->
+  <main>
+    <div class="container">
+      <header>
+        <h1>Find a Dog or Cat</h1>
+      </header>
+  
+      <form id="pet-search-form">
+        <div class="form-group">
+          <label for="animal-type">Select Animal Type:</label>
+          <select id="animal-type" name="animal-type">
+            <option value="select">Select</option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="breed">Breed:</label>
+          <input type="text" id="breed" name="breed">
+        </div>
+  
+        <div class="form-group">
+          <label for="age">Select Age:</label>
+          <select id="age" name="age">
+            <option value="any">Any Age</option>
+            <option value="puppy/kitten">Puppy/Kitten</option>
+            <option value="adult">Adult</option>
+            <option value="senior">Senior</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="gender">Select Gender:</label>
+          <select id="gender" name="gender">
+            <option value="any">Any Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="compatibility">Compatibility:</label>
+          <select id="compatibility" name="compatibility">
+            <option value="any">Doesn't Matter</option>
+            <option value="other-dogs">Gets Along with Other Dogs</option>
+            <option value="other-cats">Gets Along with Other Cats</option>
+            <option value="children">
+              Suitable for a Family with Small Children
+            </option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <button type="submit" onclick="validateForm(event)">Submit</button>
+          <button type="reset">Clear</button>
+        </div>
+      </form>
+  
+      <div id="error-message" style="color: red; display: none;">Please fill in all fields.</div>
+      <h1>Search Result</h1>
+      <div id="searchResults">Fill up the form to get search result</div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer"></footer>
+
+  <script>
+    function validateForm(event) {
+      event.preventDefault(); // Prevent the form from submitting by default
+
+      // Get form elements
+      var animalType = document.getElementById('animal-type');
+      var breed = document.getElementById('breed');
+      var age = document.getElementById('age');
+      var gender = document.getElementById('gender');
+
+      // Check if any field is blank
+      if (animalType.value === 'select' || breed.value === '' || age.value === 'any' || gender.value === 'any') {
+        document.getElementById('error-message').style.display = 'block'; // Show error message
+      } else {
+        document.getElementById('error-message').style.display = 'none'; // Hide error message
+        var searchQuery = {
+          animalType: animalType.value,
+          breed: breed.value,
+          age: age.value,
+          gender: gender.value
+        };
+
+        // Send search query to the server
+        fetch('http://localhost:3000/search', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(searchQuery)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display search results
+            console.log(data)
+            displaySearchResults(data);
+        })
+      }
+    }
+
+    function displaySearchResults(results) {
+      var resultsDiv = document.getElementById('searchResults');
+      resultsDiv.innerHTML = ''; // Clear previous results
+  
+      if (results.length === 0) {
+          resultsDiv.textContent = 'No pets found matching the search criteria.';
+      } else {
+          results.forEach(pet => {
+              var petInfo = document.createElement('div');
+              petInfo.textContent = `ID: ${pet.id}, Animal Type: ${pet.animalType}, Breed: ${pet.breed}, Age: ${pet.age}, Gender: ${pet.gender}`;
+              resultsDiv.appendChild(petInfo);
+          });
+      }
+    }
+  </script>
+</body>
+</html>

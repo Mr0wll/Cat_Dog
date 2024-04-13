@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browse Available Pets - Adopt A-Cat/Dog</title>
+    <link rel="stylesheet" href="account.css" />
+    <script src="Q7.js" defer></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header id="header"></header>
+
+    <!-- Side Menu -->
+    <aside>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="find_dc.html">Find a dog/cat</a></li>
+          <li><a href="dog_care.html">Dog Care</a></li>
+          <li><a href="cat_care.html">Cat Care</a></li>
+          <li><a href="login.html">Have a pet to give away</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="account.html">Create account</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <main>
+      <h1>Create an Account</h1>
+      <form id="createAccountForm">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+          <br>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+          <br>
+          <button type="submit">Create Account</button>
+      </form>
+      <p id="message"></p>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <script>
+      document.getElementById('createAccountForm').addEventListener('submit', async(event) => {
+        event.preventDefault();
+    
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+    
+        // Validate username and password format
+        const usernameRegex = /^[a-zA-Z0-9]+$/;
+        const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{4,}$/;
+    
+        if (!username.match(usernameRegex)) {
+          document.getElementById('message').textContent = 'Username format is invalid.';
+        } else if (!password.match(passwordRegex)){
+          document.getElementById('message').textContent = 'Password format is invalid.';
+        } else {
+          const user = {username, password}
+          const response = await fetch('http://localhost:3000/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(user)
+          });
+          const data = await response.json();
+          message.textContent = data.message;
+      }
+    });
+    
+    </script>
+  </body>
+</html>

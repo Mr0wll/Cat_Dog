@@ -1,0 +1,3 @@
+1:dog:Bulldog:adult:male:other-dogs:good boy:arnob:asdf@gmail.com
+2:cat:Persian:senior:female:other-cats:Good girl:arnob:asdf@gmail.com
+3:dog:Huski:puppy/kitten:female:other-dogs:noice:arnob:asdf@gmail.com
